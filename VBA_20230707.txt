@@ -1,0 +1,905 @@
+'ニューラルネットワーク法によるレーザ切断最適化
+
+Sub AI計算1()
+  Call 真値設定1
+  eta = Cells(5, 13).Value
+ For i = 8 To 1006
+  dd = 0#
+ For J = 1 To 101
+  x11 = (Cells(J + 7, 2).Value - 150) / 350
+  x12 = (Cells(J + 7, 3).Value - 1) / 3.5
+  t2 = Cells(J + 7, 4).Value
+  If i = 8 And J = 1 Then
+    w111 = 0.1
+    w112 = 0.2
+    w113 = 0.3
+    w121 = 0.4
+    w122 = 0.5
+    w123 = 0.6
+    b11 = 0.7
+    b12 = 0.8
+    b13 = 0.9
+    w21 = 0.1
+    w22 = 0.2
+    w23 = 0.3
+    B2 = 0.4
+  Else
+    w111 = w111n
+    w112 = w112n
+    w113 = w113n
+    w121 = w121n
+    w122 = w122n
+    w123 = w123n
+    b11 = b11n
+    b12 = b12n
+    b13 = b13n
+    w21 = w21n
+    w22 = w22n
+    w23 = w23n
+    B2 = b2n
+  End If
+  a11 = x11 * w111 + x12 * w121 + b11
+  a12 = x11 * w112 + x12 * w122 + b12
+  a13 = x11 * w113 + x12 * w123 + b13
+  x21 = 1 / (1 + Exp(-a11))
+  x22 = 1 / (1 + Exp(-a12))
+  x23 = 1 / (1 + Exp(-a13))
+  a2 = x21 * w21 + x22 * w22 + x23 * w23 + B2
+  y2 = a2
+  delta2 = y2 - t2
+  grad_b2 = delta2
+  grad_w21 = x21 * delta2
+  grad_w22 = x22 * delta2
+  grad_w23 = x23 * delta2
+  grad_x21 = delta2 * w21
+  grad_x22 = delta2 * w22
+  grad_x23 = delta2 * w23
+  delta11 = grad_x21 * (1 - x21) * x21
+  delta12 = grad_x22 * (1 - x22) * x22
+  delta13 = grad_x23 * (1 - x23) * x23
+  grad_b11 = delta11
+  grad_b12 = delta12
+  grad_b13 = delta13
+  grad_w111 = x11 * delta11
+  grad_w112 = x11 * delta12
+  grad_w113 = x11 * delta13
+  grad_w121 = x12 * delta11
+  grad_w122 = x12 * delta12
+  grad_w123 = x12 * delta13
+  w111n = w111 - grad_w111 * eta
+  w112n = w112 - grad_w112 * eta
+  w113n = w113 - grad_w113 * eta
+  w121n = w121 - grad_w121 * eta
+  w122n = w122 - grad_w122 * eta
+  w123n = w123 - grad_w123 * eta
+  b11n = b11 - grad_b11 * eta
+  b12n = b12 - grad_b12 * eta
+  b13n = b13 - grad_b13 * eta
+  w21n = w21 - grad_w21 * eta
+  w22n = w22 - grad_w22 * eta
+  w23n = w23 - grad_w23 * eta
+  b2n = B2 - grad_b2 * eta
+  dd = dd + 0.5 * delta2 * delta2
+ Next J
+    Cells(i, 6).Value = i
+    Cells(i, 7).Value = x11
+    Cells(i, 8).Value = x12
+    Cells(i, 9).Value = a11
+    Cells(i, 10).Value = a12
+    Cells(i, 11).Value = a13
+    Cells(i, 12).Value = x21
+    Cells(i, 13).Value = x22
+    Cells(i, 14).Value = x23
+    Cells(i, 15).Value = a2
+    Cells(i, 16).Value = y2
+    Cells(i, 17).Value = t2
+    Cells(i, 18).Value = delta2
+    Cells(i, 19).Value = dd
+    Cells(i, 20).Value = w111n
+    Cells(i, 21).Value = w112n
+    Cells(i, 22).Value = w113n
+    Cells(i, 23).Value = w121n
+    Cells(i, 24).Value = w122n
+    Cells(i, 25).Value = w123n
+    Cells(i, 26).Value = b11n
+    Cells(i, 27).Value = b12n
+    Cells(i, 28).Value = b13n
+    Cells(i, 29).Value = w21n
+    Cells(i, 30).Value = w22n
+    Cells(i, 31).Value = w23n
+    Cells(i, 32).Value = b2n
+ Next i
+    Cells(7, 20).Value = w111n
+    Cells(7, 21).Value = w112n
+    Cells(7, 22).Value = w113n
+    Cells(7, 23).Value = w121n
+    Cells(7, 24).Value = w122n
+    Cells(7, 25).Value = w123n
+    Cells(7, 26).Value = b11n
+    Cells(7, 27).Value = b12n
+    Cells(7, 28).Value = b13n
+    Cells(7, 29).Value = w21n
+    Cells(7, 30).Value = w22n
+    Cells(7, 31).Value = w23n
+    Cells(7, 32).Value = b2n
+End Sub
+
+Sub クリア1()
+  Range(Cells(8, 4), Cells(2006, 32)).Value = ""
+  Range(Cells(7, 19), Cells(7, 32)).Value = ""
+End Sub
+
+Sub クリア2()
+  Range(Cells(8, 4), Cells(2006, 7)).Value = ""
+End Sub
+
+Sub クリア3()
+  Cells(21, 5).Value = ""
+End Sub
+
+Sub テスト計算2()
+  Call 真値設定2
+    w111 = Cells(7, 8).Value
+    w112 = Cells(7, 9).Value
+    w113 = Cells(7, 10).Value
+    w121 = Cells(7, 11).Value
+    w122 = Cells(7, 12).Value
+    w123 = Cells(7, 13).Value
+    b11 = Cells(7, 14).Value
+    b12 = Cells(7, 15).Value
+    b13 = Cells(7, 16).Value
+    w21 = Cells(7, 17).Value
+    w22 = Cells(7, 18).Value
+    w23 = Cells(7, 19).Value
+    B2 = Cells(7, 20).Value
+ For J = 8 To 128
+  x11 = (Cells(J, 2).Value - 150) / 350
+  x12 = (Cells(J, 3).Value - 1) / 3.5
+  a11 = x11 * w111 + x12 * w121 + b11
+  a12 = x11 * w112 + x12 * w122 + b12
+  a13 = x11 * w113 + x12 * w123 + b13
+  x21 = 1 / (1 + Exp(-a11))
+  x22 = 1 / (1 + Exp(-a12))
+  x23 = 1 / (1 + Exp(-a13))
+  y2 = x21 * w21 + x22 * w22 + x23 * w23 + B2
+  s2 = Cells(J, 6).Value
+  delta2 = y2 - s2
+    Cells(J, 5).Value = y2
+    Cells(J, 7).Value = delta2
+ Next J
+End Sub
+
+Sub 真値設定1()
+ For J = 1 To 101
+  x11 = Cells(J + 7, 2).Value
+  x12 = Cells(J + 7, 3).Value
+  va1 = 0.00767 * x11 + 0.567
+  va6 = 0.00514 * x11 + 0.774
+  va4 = 0.00767 * x11 - 2.33
+  va3 = 1.2
+  If x12 > va1 Then
+    tt = -0.5
+  ElseIf x12 >= va6 Then
+    tt = (va1 - x12) / (va1 - va6)
+  ElseIf x12 >= va3 And va3 > va4 Then
+    tt = 1 - (va6 - x12) / (va6 - va3)
+  ElseIf x12 >= va4 And va4 > va3 Then
+    tt = 1 - (va6 - x12) / (va6 - va4)
+  Else
+    tt = -0.5
+  End If
+  If x11 > 500 Then
+    tt = -0.5
+  ElseIf x11 >= 165 Then
+    tt = tt
+  ElseIf x11 >= 150 And tt > 0 Then
+    tt = tt * (x11 - 150) / (165 - 150)
+  ElseIf x11 < 150 Then
+    tt = -0.5
+  End If
+  
+  Cells(J + 7, 4).Value = tt
+ Next J
+End Sub
+
+Sub 真値設定2()
+ For J = 1 To 121
+  x11 = Cells(J + 7, 2).Value
+  x12 = Cells(J + 7, 3).Value
+  va1 = 0.00767 * x11 + 0.567
+  va6 = 0.00514 * x11 + 0.774
+  va4 = 0.00767 * x11 - 2.33
+  va3 = 1.2
+  If x12 > va1 Then
+    tt = -0.5
+  ElseIf x12 >= va6 Then
+    tt = (va1 - x12) / (va1 - va6)
+  ElseIf x12 >= va3 And va3 > va4 Then
+    tt = 1 - (va6 - x12) / (va6 - va3)
+  ElseIf x12 >= va4 And va4 > va3 Then
+    tt = 1 - (va6 - x12) / (va6 - va4)
+  Else
+    tt = -0.5
+  End If
+  If x11 > 500 Then
+    tt = -0.5
+  ElseIf x11 >= 165 Then
+    tt = tt
+  ElseIf x11 >= 150 And tt > 0 Then
+    tt = tt * (x11 - 150) / (165 - 150)
+  ElseIf x11 < 150 Then
+    tt = -0.5
+  End If
+
+  Cells(J + 7, 6).Value = tt
+ Next J
+End Sub
+
+Sub 適正度計算3()
+    w111 = Cells(7, 8).Value
+    w112 = Cells(7, 9).Value
+    w113 = Cells(7, 10).Value
+    w121 = Cells(7, 11).Value
+    w122 = Cells(7, 12).Value
+    w123 = Cells(7, 13).Value
+    b11 = Cells(7, 14).Value
+    b12 = Cells(7, 15).Value
+    b13 = Cells(7, 16).Value
+    w21 = Cells(7, 17).Value
+    w22 = Cells(7, 18).Value
+    w23 = Cells(7, 19).Value
+    B2 = Cells(7, 20).Value
+    
+  f = Cells(9, 5).Value
+  P = Cells(10, 5).Value
+  h = Cells(11, 5).Value / 1000
+  d = Cells(12, 5).Value / 1000
+  rou = Cells(14, 5).Value
+  c = Cells(15, 5).Value
+  tm = Cells(16, 5).Value
+  L = Cells(17, 5).Value
+  'Fの規格化 hdrou(cTm+L)
+  an1 = h * d * rou * (c * tm + L) / (0.0016 * 0.001 * 7800 * (530# * 1800# + 270000#))
+  f = f * an1
+    
+  x11 = (P - 150) / 350
+  x12 = (f - 1) / 3.5
+  u11 = x11 * w111 + x12 * w121 + b11
+  u12 = x11 * w112 + x12 * w122 + b12
+  u13 = x11 * w113 + x12 * w123 + b13
+  y11 = 1 / (1 + Exp(-u11))
+  y12 = 1 / (1 + Exp(-u12))
+  y13 = 1 / (1 + Exp(-u13))
+  x21 = y11
+  x22 = y12
+  x23 = y13
+  u2 = x21 * w21 + x22 * w22 + x23 * w23 + B2
+  y2 = u2
+  
+  If y2 < 0 Then y2 = 0
+    Cells(21, 5).Value = y2
+End Sub
+
+
+'付録の機械学習関係
+Dim XC(22), YC(22), Fc(22), Kd(10, 10, 2), Xd(10), Yd(10), Kf(50, 7)
+Dim Dm(5), Fd(5), awk(100, 5)
+Dim f(22)
+
+'決定木
+'Dim XC(22), YC(22), Fc(22), Kd(10, 10, 2), Xd(10), Yd(10), Kf(50, 7)
+Sub DcalcTree1()
+'ID3法
+  Range(Cells(43, 7), Cells(43, 103)).Value = ""
+  'Range(Cells(31, 7), Cells(35, 10)).Value = ""
+  Range(Cells(53, 5), Cells(73, 103)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  Kn = Cells(24, 7).Value
+  For i = 1 To n
+    XC(i) = Cells(27, 6 + i).Value
+    YC(i) = Cells(28, 6 + i).Value
+    Fc(i) = Cells(29, 6 + i).Value
+  Next i
+
+  xmax = 100
+  xmin = 0
+  Xd(1) = xmin
+  Xd(10) = xmax
+  Yd(1) = xmin
+  Yd(10) = xmax
+  For i = 2 To 9
+    Xd(i) = xmin + (xmax - xmin) / 10 * (i - 0.5)
+    Yd(i) = Xd(i)
+    'Cells(51, 6 + i).Value = Xd(i)
+  Next i
+  For i = 1 To 9
+  For J = 1 To 9
+    Kd(i, J, 1) = 0
+    Kd(i, J, 2) = 0
+  Next J
+  Next i
+  
+  For J = 1 To n
+    im = 0
+    Jm = 0
+    For i = 1 To 9
+      If XC(J) >= Xd(i) And XC(J) <= Xd(i + 1) Then im = i
+      If YC(J) >= Yd(i) And YC(J) <= Yd(i + 1) Then Jm = i
+    Next i
+    If Fc(J) > 0 Then
+      Kd(im, Jm, 1) = Kd(im, Jm, 1) + 1
+    Else
+      Kd(im, Jm, 2) = Kd(im, Jm, 2) + 1
+    End If
+  Next J
+  For J = 1 To 9
+    Cells(52 + J, 5).Value = J
+  For i = 1 To 9
+    Cells(52 + J, 6 + i).Value = Kd(i, J, 1)
+    Cells(52 + J, 16 + i).Value = Kd(i, J, 2)
+  Next i
+  Next J
+  Kf(1, 1) = 1
+  Kf(1, 2) = 10
+  Kf(1, 3) = 1
+  Kf(1, 4) = 10
+  Kfm = 1
+  kpm = 6
+  p11 = n1 / n
+  p12 = (n - n1) / n
+  B1 = (-p11 * Log(p11) - p12 * Log(p12)) / Log(2)
+  Kf(1, 5) = B1
+  Kf(1, 6) = B1
+  
+  Cells(64, kpm + 1).Value = 0
+  Cells(65, kpm + 1).Value = 0
+  Cells(66, kpm + 1).Value = Kf(1, 1)
+  Cells(67, kpm + 1).Value = Kf(1, 2)
+  Cells(68, kpm + 1).Value = Kf(1, 3)
+  Cells(69, kpm + 1).Value = Kf(1, 4)
+  Cells(70, kpm + 1).Value = Kf(1, 5)
+  Cells(71, kpm + 1).Value = Kf(1, 6)
+  
+  For Ka = 1 To 10
+    Bam = 100000#
+    im = 0
+    Jm = 0
+    For Kb = 1 To Kfm
+      ias = Kf(Kb, 1)
+      ie = Kf(Kb, 2)
+      Jas = Kf(Kb, 3)
+      Je = Kf(Kb, 4)
+  
+      Call DcalEnt1(Kb, ias, ie, Jas, Je, Bam, Bm1, Bm2, Fm1, Fm2, Kbm, im, Jm)
+  
+      'Cells(31, 5 + Ka + Kb).Value = Ka
+      'Cells(32, 5 + Ka + Kb).Value = Kb
+      'Cells(33, 5 + Ka + Kb).Value = Bam
+      'Cells(34, 5 + Ka + Kb).Value = im
+      'Cells(35, 5 + Ka + Kb).Value = Jm
+    Next Kb
+      
+    If Kf(Kfm, 6) <= Bam Then Exit For
+    '分割してもBamが減らないので終了
+    
+      Kfm = Kfm + 1
+      If Jm = 0 Then
+        Kf(Kbm, 2) = im
+        Kf(Kbm, 5) = Bm1
+        Kf(Kbm, 7) = Fm1
+        Kf(Kfm, 1) = im
+        Kf(Kfm, 2) = ie
+        Kf(Kfm, 3) = Kf(Kbm, 3)
+        Kf(Kfm, 4) = Kf(Kbm, 4)
+        Kf(Kfm, 5) = Bm2
+        Kf(Kfm, 6) = Bam
+        Kf(Kfm, 7) = Fm2
+      Else
+        Kf(Kbm, 4) = Jm
+        Kf(Kbm, 5) = Bm1
+        Kf(Kbm, 7) = Fm1
+        Kf(Kfm, 1) = Kf(Kbm, 1)
+        Kf(Kfm, 2) = Kf(Kbm, 2)
+        Kf(Kfm, 3) = Jm
+        Kf(Kfm, 4) = Je
+        Kf(Kfm, 5) = Bm2
+        Kf(Kfm, 6) = Bam
+        Kf(Kfm, 7) = Fm2
+      End If
+    
+      kpm = kpm + Kfm
+      For i = 1 To Kfm
+        Cells(64, kpm + i).Value = Ka
+        Cells(65, kpm + i).Value = Kbm
+        Cells(66, kpm + i).Value = Kf(i, 1)
+        Cells(67, kpm + i).Value = Kf(i, 2)
+        Cells(68, kpm + i).Value = Kf(i, 3)
+        Cells(69, kpm + i).Value = Kf(i, 4)
+        Cells(70, kpm + i).Value = Kf(i, 5)
+        Cells(71, kpm + i).Value = Kf(i, 6)
+        Cells(72, kpm + i).Value = Kf(i, 7)
+      Next i
+    If Bam = 0 Then Exit For
+    'Bamが最小になったので終了
+  Next Ka
+  
+  For J = 1 To 97
+    If J > n And J <= 16 Then
+    Else
+      Xj = Cells(41, 6 + J).Value
+      Yj = Cells(42, 6 + J).Value
+      For i = 1 To Kfm
+        If Xj >= Xd(Kf(i, 1)) And Xj <= Xd(Kf(i, 2)) And Yj >= Yd(Kf(i, 3)) And Yj <= Yd(Kf(i, 4)) Then
+          Cells(43, 6 + J).Value = Kf(i, 7)
+          Exit For
+        End If
+      Next i
+    End If
+  Next J
+End Sub
+
+Sub DcalEnt1(Kb, ias, ie, Jas, Je, Bam, Bm1, Bm2, Fm1, Fm2, Kbm, im, Jm)
+  kae = ie - ias - 1 + Je - Jas - 1
+  For Ka = 1 To kae
+    If Ka <= ie - ias - 1 Then
+      ib = Ka + 1
+      Jb = 0
+    Else
+      ib = 0
+      Jb = Ka + 1 - (ie - ias - 1)
+    End If
+    Kd11 = 0
+    Kd12 = 0
+    Kd21 = 0
+    Kd22 = 0
+    For i = ias To ie - 1
+    For J = Jas To Je - 1
+      If (Jb = 0 And i < ib) Or (ib = 0 And J < Jb) Then
+        Kd11 = Kd11 + Kd(i, J, 1)
+        Kd12 = Kd12 + Kd(i, J, 2)
+      Else
+        Kd21 = Kd21 + Kd(i, J, 1)
+        Kd22 = Kd22 + Kd(i, J, 2)
+      End If
+    Next J
+    Next i
+    If (Kd11 + Kd12 + Kd21 + Kd22) = 0 Then
+    '分割できない，そのまま戻る
+      Ba = 100000#
+      B1 = 100000#
+      B2 = 100000#
+      Exit Sub
+    ElseIf (Kd11 + Kd12) = 0 Or (Kd21 + Kd22) = 0 Then
+    'この分割計算しないで次の分割計算に進む
+    Else
+      If Kd11 = 0 Or Kd12 = 0 Then
+        B1 = 0
+      Else
+        p11 = Kd11 / (Kd11 + Kd12)
+        p12 = Kd12 / (Kd11 + Kd12)
+        B1 = (-p11 * Log(p11) - p12 * Log(p12)) / Log(2)
+      End If
+      If Kd21 = 0 Or Kd22 = 0 Then
+        B2 = 0
+      Else
+        p21 = Kd21 / (Kd21 + Kd22)
+        p22 = Kd22 / (Kd21 + Kd22)
+        B2 = (-p1 * Log(p21) - p22 * Log(p22)) / Log(2)
+      End If
+      Ba = ((Kd11 + Kd12) * B1 + (Kd21 + Kd22) * B2) / (Kd11 + Kd12 + Kd21 + Kd22)
+      If Ba < Bam Then
+        Bam = Ba
+        Bm1 = B1
+        Bm2 = B2
+        Kbm = Kb
+        im = ib
+        Jm = Jb
+        If Kd11 > Kd12 Then
+          Fm1 = 1
+        Else
+          Fm1 = -1
+        End If
+        If Kd21 > Kd22 Then
+          Fm2 = 1
+        Else
+          Fm2 = -1
+        End If
+      End If
+    End If
+    
+      'Cells(31, 6 + Ka).Value = ib
+      'Cells(32, 6 + Ka).Value = Jb
+      'Cells(33, 6 + Ka).Value = Bam
+      'Cells(34, 6 + Ka).Value = Kd11
+      'Cells(35, 6 + Ka).Value = Kd12
+      'Cells(36, 6 + Ka).Value = Kd21
+      'Cells(37, 6 + Ka).Value = Kd22
+      'Cells(38, 6 + Ka).Value = B1
+      'Cells(39, 6 + Ka).Value = B2
+  Next Ka
+End Sub
+
+Sub Dinita1()
+  Range(Cells(27, 7), Cells(28, 21)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  x1 = Cells(18, 7).Value
+  y1 = Cells(19, 7).Value
+  r1 = Cells(20, 7).Value
+  x2 = Cells(21, 7).Value
+  y2 = Cells(22, 7).Value
+  r2 = Cells(23, 7).Value
+
+  For i = 1 To n
+    sa = 2 * 3.14 * Rnd
+    If i <= n1 Then
+      Cells(27, 6 + i).Value = x1 + r1 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y1 + r1 * Sin(sa) * Rnd
+    Else
+      Cells(27, 6 + i).Value = x2 + r2 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y2 + r2 * Sin(sa) * Rnd
+    End If
+  Next i
+    
+  Call Dinitb1
+End Sub
+
+Sub Dinitb1()
+  Range(Cells(41, 7), Cells(43, 21)).Value = Range(Cells(27, 7), Cells(29, 21)).Value
+  Range(Cells(43, 23), Cells(43, 103)).Value = ""
+End Sub
+
+'----------------------------------------
+'k近傍法 (k-Nearest Neighbor (kNN))
+'Dim XC(22), YC(22), Fc(22), Dm(5), Fd(5), awk(100, 5)
+Sub NcalcKNN2()
+  Range(Cells(43, 7), Cells(43, 103)).Value = ""
+  n = Cells(16, 7).Value
+  Kn = Cells(24, 7).Value
+  For i = 1 To n
+    XC(i) = Cells(27, 6 + i).Value
+    YC(i) = Cells(28, 6 + i).Value
+    Fc(i) = Cells(29, 6 + i).Value
+  Next i
+
+  For J = 1 To 97
+    If J > n And J <= 16 Then
+    Else
+      Xj = Cells(41, 6 + J).Value
+      Yj = Cells(42, 6 + J).Value
+        For i = 1 To 5
+          Dm(i) = 9000000000#
+          Fd(i) = 0
+        Next i
+        Dm(0) = 0#
+        For Ka = 1 To 5
+        For i = 1 To n
+          Di = (XC(i) - Xj) * (XC(i) - Xj) + (YC(i) - Yj) * (YC(i) - Yj)
+          If Di < Dm(Ka) And Di > Dm(Ka - 1) Then
+            Dm(Ka) = Di
+            Fd(Ka) = Fc(i)
+            'awk(J, ka) = i
+          End If
+        Next i
+        Next Ka
+        Fj = 0
+        For im = 1 To Kn
+          Fj = Fj + Fd(im)
+        Next im
+        Fj = Fj / Kn
+        Cells(43, 6 + J).Value = Fj
+        'Cells(48, 6 + J).Value = awk(J, 1)
+        'Cells(49, 6 + J).Value = awk(J, 2)
+        'Cells(50, 6 + J).Value = awk(J, 3)
+    End If
+  Next J
+End Sub
+
+Sub Ninita2()
+  Range(Cells(27, 7), Cells(28, 21)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  x1 = Cells(18, 7).Value
+  y1 = Cells(19, 7).Value
+  r1 = Cells(20, 7).Value
+  x2 = Cells(21, 7).Value
+  y2 = Cells(22, 7).Value
+  r2 = Cells(23, 7).Value
+
+  For i = 1 To n
+    sa = 2 * 3.14 * Rnd
+    If i <= n1 Then
+      Cells(27, 6 + i).Value = x1 + r1 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y1 + r1 * Sin(sa) * Rnd
+    Else
+      Cells(27, 6 + i).Value = x2 + r2 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y2 + r2 * Sin(sa) * Rnd
+    End If
+  Next i
+    
+  Call Ninitb2
+End Sub
+
+Sub Ninitb2()
+  Range(Cells(41, 7), Cells(43, 21)).Value = Range(Cells(27, 7), Cells(29, 21)).Value
+  Range(Cells(43, 23), Cells(43, 103)).Value = ""
+End Sub
+
+'----------------------------------------
+'サポートベクターマシン
+Sub SVMSolver3()
+'ソルバー
+    SolverReset
+    SolverOptions MaxTime:=0, Iterations:=0, Precision:=0.000001, Convergence:= _
+        0.000000001, StepThru:=False, Scaling:=True, AssumeNonNeg:=True, Derivatives:=1
+    SolverOk SetCell:="$G$33", MaxMinVal:=1, ValueOf:=0, ByChange:="$G$44:$U$44", _
+        Engine:=1, EngineDesc:="GRG Nonlinear"
+    SolverAdd cellRef:=Range("g34"), relation:=2, formulaText:=0
+    SolverSolve
+    DoEvents
+    Application.Wait Now() + 500 / 86400000
+    
+    Cells(38, 7).Value = 1
+    n = Cells(16, 7).Value
+    fim = 0
+    For i = 1 To n
+      ti = Cells(43, 6 + i).Value
+      fi = Cells(44, 6 + i).Value
+      If ti > 0 And fi > 0 Then
+        fim = fi
+        im = i
+      End If
+    Next i
+    w1 = Cells(35, 7).Value
+    w2 = Cells(36, 7).Value
+    xi = Cells(27, 6 + im).Value
+    yi = Cells(28, 6 + im).Value
+    w0 = 1 - (w1 * xi + w2 * yi)
+    Cells(37, 7).Value = w0
+End Sub
+
+Sub Sinita3()
+  Range(Cells(27, 7), Cells(28, 21)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  x1 = Cells(18, 7).Value
+  y1 = Cells(19, 7).Value
+  r1 = Cells(20, 7).Value
+  x2 = Cells(21, 7).Value
+  y2 = Cells(22, 7).Value
+  r2 = Cells(23, 7).Value
+
+  For i = 1 To n
+    sa = 2 * 3.14 * Rnd
+    If i <= n1 Then
+      Cells(27, 6 + i).Value = x1 + r1 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y1 + r1 * Sin(sa) * Rnd
+      Cells(29, 6 + i).Value = 1
+    Else
+      Cells(27, 6 + i).Value = x2 + r2 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y2 + r2 * Sin(sa) * Rnd
+      Cells(29, 6 + i).Value = -1
+    End If
+      Cells(30, 6 + i).Value = 2
+    Next i
+   
+  Call Sinitb3
+End Sub
+
+Sub Sinitb3()
+  Range(Cells(41, 7), Cells(44, 21)).Value = Range(Cells(27, 7), Cells(30, 21)).Value
+  Cells(38, 7).Value = 0
+  Cells(37, 7).Value = 99
+End Sub
+
+'----------------------------------------
+'ガウスカーネルサポートベクターマシン
+'Dim f(22)
+Sub GSVMSolver4()
+'ソルバー
+    SolverReset
+    SolverOptions MaxTime:=0, Iterations:=0, Precision:=0.000001, Convergence:= _
+        0.000001, StepThru:=False, Scaling:=True, AssumeNonNeg:=True, Derivatives:=1
+    SolverOk SetCell:="$G$33", MaxMinVal:=1, ValueOf:=0, ByChange:="$G$44:$U$44", _
+        Engine:=1, EngineDesc:="GRG Nonlinear"
+    SolverAdd cellRef:=Range("g34"), relation:=2, formulaText:=0
+    SolverSolve
+    
+    Cells(38, 7).Value = 1
+    DoEvents
+    Application.Wait Now() + 500 / 86400000
+    
+    n = Cells(16, 7).Value
+    For i = 1 To n
+      f(i) = 0
+      For J = 1 To n
+        f(i) = f(i) + Cells(48 + J, 6 + i).Value
+      Next J
+    Next i
+    Jm = 7
+    fmax = -10000000000#
+    For i = 1 To n
+      tm = Cells(43, 6 + i).Value
+      If tm = -1 And f(i) > fmax Then
+        fmax = f(i)
+        Jm = i
+      End If
+    Next i
+    Cells(36, 7).Value = Jm
+
+    w0 = -1 - f(Jm)
+    Cells(37, 7).Value = w0
+    For i = 1 To n
+      Cells(47, 6 + i).Value = f(i) + w0
+      If f(i) + w0 < -0.9 Then
+        Cells(43, 6 + i).Value = -1
+      Else
+        Cells(43, 6 + i).Value = 1
+      End If
+    Next i
+End Sub
+
+Sub Ginita4()
+  Range(Cells(27, 7), Cells(30, 21)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  x1 = Cells(18, 7).Value
+  y1 = Cells(19, 7).Value
+  r1 = Cells(20, 7).Value
+  x2 = Cells(21, 7).Value
+  y2 = Cells(22, 7).Value
+  r2 = Cells(23, 7).Value
+
+  J = n1
+  For i = 1 To 2 * n
+    sa = 2 * 3.14 * Rnd
+    If i <= n1 Then
+      Cells(27, 6 + i).Value = x1 + r1 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y1 + r1 * Sin(sa) * Rnd
+      Cells(29, 6 + i).Value = 1
+      Cells(30, 6 + i).Value = 1
+    Else
+      xa2 = x2 + r2 * Cos(sa) * Rnd
+      ya2 = y2 + r2 * Sin(sa) * Rnd
+      If (xa2 - x1) * (xa2 - x1) + (ya2 - y1) * (ya2 - y1) > r1 * r1 Then
+      '分類1の範囲には入れない
+        J = J + 1
+        If J > n Then Exit For
+        Cells(27, 6 + J).Value = xa2
+        Cells(28, 6 + J).Value = ya2
+        Cells(29, 6 + J).Value = -1
+        Cells(30, 6 + J).Value = 1
+      End If
+    End If
+  Next i
+    
+  Call Ginitb4
+End Sub
+
+Sub Ginitb4()
+  Range(Cells(41, 7), Cells(44, 21)).Value = Range(Cells(27, 7), Cells(30, 21)).Value
+  Cells(38, 7).Value = 0
+End Sub
+
+'----------------------------------------
+'k平均法 (k-mean法)
+'Dim XC(22), YC(22), Fc(22)
+Sub KcalcKmean5()
+  Range(Cells(43, 7), Cells(43, 21)).Value = ""
+  Range(Cells(41, 23), Cells(43, 24)).Value = ""
+  Range(Cells(49, 6), Cells(59, 32)).Value = ""
+    
+  DoEvents
+  Application.Wait Now() + 1000 / 86400000
+  
+  n = Cells(16, 7).Value
+  For i = 1 To n
+    XC(i) = Cells(27, 6 + i).Value
+    YC(i) = Cells(28, 6 + i).Value
+    Fc(i) = 0
+  Next i
+
+  Ka1 = 1 + Int(n * Rnd)
+  If Ka1 > n Then Ka1 = Int(n / 2)
+  Ka2 = 1 + Int(n * Rnd)
+  If Ka2 = Ka1 Or Ka2 > n Then Ka2 = Ka1 + 1
+  Xg1 = XC(Ka1)
+  Xg2 = XC(Ka2)
+  Yg1 = YC(Ka1)
+  Yg2 = YC(Ka2)
+  For Kb = 1 To 10
+    Kac = 0
+    For i = 1 To n
+      D1 = (XC(i) - Xg1) * (XC(i) - Xg1) + (YC(i) - Yg1) * (YC(i) - Yg1)
+      D2 = (XC(i) - Xg2) * (XC(i) - Xg2) + (YC(i) - Yg2) * (YC(i) - Yg2)
+      If D1 < D2 Then
+        If Fc(i) <> 1 Then Kac = Kac + 1
+        Fc(i) = 1
+      Else
+        If Fc(i) <> 2 Then Kac = Kac + 1
+        Fc(i) = 2
+      End If
+    Next i
+    Cells(48 + Kb, 23).Value = Kb
+    Cells(48 + Kb, 24).Value = Xg1
+    Cells(48 + Kb, 25).Value = Yg1
+    Cells(48 + Kb, 26).Value = Xg2
+    Cells(48 + Kb, 27).Value = Yg2
+    Cells(48 + Kb, 28).Value = Kac
+    
+    Cells(41, 23).Value = Xg1
+    Cells(42, 23).Value = Yg1
+    Cells(41, 24).Value = Xg2
+    Cells(42, 24).Value = Yg2
+    For i = 1 To n
+      Cells(48 + Kb, 6 + i).Value = Fc(i)
+      Cells(43, 6 + i).Value = Fc(i)
+    Next i
+    
+    DoEvents
+    Application.Wait Now() + 1000 / 86400000
+    
+    If Kac = 0 Then Exit For
+
+    Xa1 = 0
+    xa2 = 0
+    Ya1 = 0
+    ya2 = 0
+    Ka1 = 0
+    Ka2 = 0
+    For i = 1 To n
+      If Fc(i) = 1 Then
+        Xa1 = Xa1 + XC(i)
+        Ya1 = Ya1 + YC(i)
+        Ka1 = Ka1 + 1
+      Else
+        xa2 = xa2 + XC(i)
+        ya2 = ya2 + YC(i)
+        Ka2 = Ka2 + 1
+      End If
+    Next i
+    If Ka1 <> 0 Then Xg1 = Xa1 / Ka1
+    If Ka1 <> 0 Then Yg1 = Ya1 / Ka1
+    If Ka2 <> 0 Then Xg2 = xa2 / Ka2
+    If Ka2 <> 0 Then Yg2 = ya2 / Ka2
+  Next Kb
+    
+  For i = 1 To n
+    Cells(43, 6 + i).Value = Fc(i)
+  Next i
+End Sub
+
+Sub Kinita5()
+  Range(Cells(27, 7), Cells(28, 21)).Value = ""
+  n = Cells(16, 7).Value
+  n1 = Cells(17, 7).Value
+  x1 = Cells(18, 7).Value
+  y1 = Cells(19, 7).Value
+  r1 = Cells(20, 7).Value
+  x2 = Cells(21, 7).Value
+  y2 = Cells(22, 7).Value
+  r2 = Cells(23, 7).Value
+
+  For i = 1 To n
+    sa = 2 * 3.14 * Rnd
+    If i <= n1 Then
+      Cells(27, 6 + i).Value = x1 + r1 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y1 + r1 * Sin(sa) * Rnd
+    Else
+      Cells(27, 6 + i).Value = x2 + r2 * Cos(sa) * Rnd
+      Cells(28, 6 + i).Value = y2 + r2 * Sin(sa) * Rnd
+    End If
+  Next i
+  
+  Call Kinitb5
+End Sub
+
+Sub Kinitb5()
+  Range(Cells(43, 7), Cells(43, 21)).Value = ""
+  Range(Cells(41, 23), Cells(43, 24)).Value = ""
+End Sub
+
+
+
+
