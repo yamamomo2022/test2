@@ -1,0 +1,68 @@
+Sub VariableDeclarationAndInitialization()
+    ' 整数型変数の宣言と初期化
+    Dim i As Integer
+    i = 10
+    
+    ' 浮動小数点型変数の宣言と初期化
+    Dim pi As Double
+    pi = 3.14159
+    
+    ' 文字列型変数の宣言と初期化
+    Dim message As String
+    message = "Hello, World!"
+    
+    ' 真偽値型変数の宣言と初期化
+    Dim isTrue As Boolean
+    isTrue = True
+End Sub
+
+' モジュールレベルの変数（グローバル変数）
+Dim globalVariable As Integer
+
+Sub VariableScope()
+    ' プロシージャレベルの変数（ローカル変数）
+    Dim localVariable As String
+    localVariable = "This is a local variable."
+    
+    ' ブロック内の変数（VBAではブロックスコープはありませんが、If文やFor文内での変数もローカル変数として扱われます）
+    If True Then
+        Dim blockVariable As Boolean
+        blockVariable = True
+    End If
+    
+    ' モジュールレベルの変数へのアクセス
+    globalVariable = 100
+    
+    ' ローカル変数へのアクセス
+    MsgBox localVariable
+End Sub
+
+Sub Constants()
+    ' 整数型定数の宣言
+    Const MAX_VALUE As Integer = 100
+    
+    ' 文字列型定数の宣言
+    Const MESSAGE As String = "This is a constant message."
+    
+    ' 定数の使用
+    MsgBox "The maximum value is: " & MAX_VALUE
+End Sub
+
+Sub Arrays()
+    ' 配列の宣言と初期化
+    Dim numbers(1 To 5) As Integer
+    numbers(1) = 10
+    numbers(2) = 20
+    numbers(3) = 30
+    numbers(4) = 40
+    numbers(5) = 50
+    
+    ' 配列の要素にアクセス
+    MsgBox "The third element is: " & numbers(3)
+    
+    ' 配列のループ処理
+    Dim i As Integer
+    For i = 1 To 5
+        MsgBox "Element " & i & ": " & numbers(i)
+    Next i
+End Sub
