@@ -1,0 +1,30 @@
+Private Sub Application_Startup()
+    Dim Response As VbMsgBoxResult
+    Dim objMail As MailItem
+    Dim strRecipient As String
+    Dim strCC As String
+    Dim strBCC As String
+    Dim strSubject As String
+    Dim strBody As String
+    
+    ' 送信先メールアドレス、CC、BCC、件名、本文を設定
+    strRecipient = "example@example.com"  ' 送信先のメールアドレスをここに記入してください。
+    strCC = "cc@example.com"              ' CCのメールアドレスをここに記入してください。
+    strBCC = "bcc@example.com"            ' BCCのメールアドレスをここに記入してください。
+    strSubject = "テストメール"
+    strBody = "これはテストメールです。"
+    
+    Response = MsgBox("メールを送信しますか？", vbYesNo + vbQuestion, "メール送信の確認")
+    
+    If Response = vbYes Then
+        Set objMail = Application.CreateItem(olMailItem)
+        With objMail
+            .To = strRecipient
+            .CC = strCC
+            .BCC = strBCC
+            .Subject = strSubject
+            .Body = strBody
+            .Send
+        End With
+    End If
+End Sub
