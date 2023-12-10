@@ -24,6 +24,14 @@
 ・データベース化（はじめは、csvとかJson。のちのちAzureのSQLへ拡大）
 
 ・大塚商会経由でAzureOpenAIServiceを導入
+https://www.otsuka-shokai.co.jp/products/microsoft/azure/
+
 
 ーーー脅威に感じていることーーー
 ・.dwgを生成するが旺盛性AI。（参考図とプロントのみで今回用の図面を生成できる。調整が必要ならCADでできる。）←正しく恐れる必要がある。
+
+
+ーーーCopilot Copyright Commitment ーーー
+https://news.microsoft.com/ja-jp/2023/09/12/230912-copilot-copyright-commitment-ai-legal-concerns/
+ただし、有料に限る
+
